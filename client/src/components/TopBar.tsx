@@ -26,29 +26,33 @@ export default function TopBar() {
   return (
     <AppBar position="sticky" color="default" sx={{ marginBottom: 2 }}>
       <Toolbar sx={{ columnGap: "0.5em" }}>
-        <Typography variant="h5">
-          <Link to="home">Voting App</Link>
-        </Typography>
+        <Link to="home">
+          <Typography variant="h5">Voting App</Typography>
+        </Link>
 
         <Box sx={{ flexGrow: 1 }} />
 
         {isAuthenticated ? (
           <React.Fragment>
-            <Button variant="contained" color="primary">
-              <Link to="surveys">Surveys</Link>
-            </Button>
+            <Link to="surveys">
+              <Button variant="contained" color="primary">
+                Surveys
+              </Button>
+            </Link>
             <Button color="primary" onClick={onSignout}>
               Sign out
             </Button>
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Button color="primary">
-              <Link to="signin">Sign in</Link>
-            </Button>
-            <Button variant="contained" color="primary">
-              <Link to="signup">Sign up</Link>
-            </Button>
+            <Link to="signin">
+              <Button color="primary">Sign in</Button>
+            </Link>
+            <Link to="signup">
+              <Button variant="contained" color="primary">
+                Sign up
+              </Button>
+            </Link>
           </React.Fragment>
         )}
       </Toolbar>

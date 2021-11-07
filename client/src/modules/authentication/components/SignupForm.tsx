@@ -3,8 +3,13 @@ import faker from "faker";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { useDispatch } from "react-redux";
+import { signin } from "../authenticationSlice";
+import { Navigate } from "react-router-dom";
 
 export default function SignupForm() {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +17,6 @@ export default function SignupForm() {
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
     if (name === "username") setUsername(value);
     else if (name === "email") setEmail(value);
     else if (name === "password") setPassword(value);
@@ -29,8 +33,11 @@ export default function SignupForm() {
       confirmPassword,
     };
 
-    console.log("%cSubmitting signup form...", "font-size: 1.25em;");
-    console.table(data);
+    // TODO : On signing up success, redirect to surveys page
+
+    dispatch(signin());
+
+    console.log("%cSignin up...", "font-size: 1.25em;");
   };
 
   const fillWithFaker = (
@@ -46,11 +53,12 @@ export default function SignupForm() {
 
   return (
     <form noValidate onSubmit={onSubmit}>
-      <Grid container spacing={2}>
+      <Grid container justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <TextField
             label="Username"
             name="username"
+            type="text"
             value={username}
             onChange={onChange}
             fullWidth

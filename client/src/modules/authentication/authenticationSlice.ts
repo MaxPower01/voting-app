@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 interface AuthenticationState {
-  userAuthenticated: boolean;
+  isAuthenticated: boolean;
 }
 
 const getLocalState = (): AuthenticationState | null => {
@@ -21,7 +21,7 @@ const getInitialState = (): AuthenticationState => {
 
   if (localState === null)
     return {
-      userAuthenticated: false,
+      isAuthenticated: false,
     };
 
   return localState;
@@ -46,11 +46,11 @@ export const authenticationSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.userAuthenticated = true;
+      state.isAuthenticated = true;
       saveState(state);
     },
     signout: (state) => {
-      state.userAuthenticated = false;
+      state.isAuthenticated = false;
       saveState(state);
     },
   },
@@ -61,7 +61,7 @@ export const { signin, signout } = authenticationSlice.actions;
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectAuthState = (state: RootState) =>
-  state.authentication.userAuthenticated;
+export const selectAuthenticationState = (state: RootState) =>
+  state.authentication.isAuthenticated;
 
 export default authenticationSlice.reducer;

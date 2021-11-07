@@ -1,14 +1,12 @@
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import React from "react";
+import SurveyChoices from "./SurveyChoices";
 
-export default function SurveyForm() {
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [choices, setChoices] = React.useState([]);
-  const [authorizeMultipleAnswers, setAuthorizeMultipleAnswers] =
-    React.useState(true);
+export default function SurveyCreationForm() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -29,21 +27,23 @@ export default function SurveyForm() {
   };
 
   return (
-    <form noValidate onSubmit={onSubmit}>
-      <Grid container spacing={2}>
+    <form onSubmit={onSubmit}>
+      <Grid container justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <TextField
             label="Title"
             name="title"
             type="text"
+            required
             value={title}
             onChange={onInputChange}
             fullWidth
           />
         </Grid>
+
         <Grid item xs={12}>
           <TextField
-            label="Email"
+            label="Description"
             name="description"
             type="text"
             value={description}
@@ -51,9 +51,14 @@ export default function SurveyForm() {
             fullWidth
           />
         </Grid>
+
+        <Grid item xs={12}>
+          <SurveyChoices />
+        </Grid>
+
         <Grid item xs={10}>
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            Submit
+            Publish survey
           </Button>
         </Grid>
       </Grid>

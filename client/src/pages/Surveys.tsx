@@ -2,9 +2,12 @@ import React from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import SurveyCreationForm from "../modules/surveyCreation/components/SurveyCreationForm";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const modalStyles = {
   position: "absolute" as "absolute",
@@ -35,21 +38,15 @@ export default function Surveys() {
             New survey
           </Button>
 
-          <Modal
-            open={surveyModalOpened}
-            onClose={closeSurveyModal}
-            aria-labelledby="survey-modal-title"
-            aria-describedby="survey-modal-description"
-          >
-            <Box sx={modalStyles}>
-              <Typography id="survey-modal-title" variant="h6" component="h2">
-                Text in a modal
-              </Typography>
-              <Typography id="survey-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography>
-            </Box>
-          </Modal>
+          <Dialog open={surveyModalOpened} onClose={closeSurveyModal}>
+            <DialogTitle>Create new survey</DialogTitle>
+
+            <DialogContent>
+              <Box sx={{ paddingTop: 2 }}>
+                <SurveyCreationForm />
+              </Box>
+            </DialogContent>
+          </Dialog>
         </Grid>
       </Grid>
     </Container>

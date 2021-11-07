@@ -29,7 +29,7 @@ export default function SignupForm() {
       confirmPassword,
     };
 
-    console.log("%cSubmitting signup form...", "font-size: 1em;");
+    console.log("%cSubmitting signup form...", "font-size: 1.25em;");
     console.table(data);
   };
 

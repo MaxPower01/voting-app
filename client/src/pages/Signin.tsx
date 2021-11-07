@@ -1,9 +1,16 @@
 import React from "react";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 export default function Signin() {
   return (
-    <div>
-      <h1>Signin</h1>
-    </div>
+    <Container>
+      <Grid container direction="column" alignItems="center" spacing={2}>
+        <Grid item>
+          <Typography variant="h1">Signin</Typography>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }

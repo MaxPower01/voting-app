@@ -1,13 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-interface Choice {
-  id: number;
-  value: string;
-}
-
 interface SurveyCreationState {
-  choices: Array<Choice>;
+  choices: Array<string>;
 }
 
 const getLocalState = (): SurveyCreationState | null => {
@@ -46,12 +41,17 @@ export const surveyCreationSlice = createSlice({
   name: "surveyCreation",
   initialState,
   reducers: {
-    addChoice: (state, payload) => {
-      //   state.choices.push({ id: choice.id, value: choice.value });
+    addChoice: (state, newChoice) => {
+      state.choices.push(newChoice.payload);
       saveState(state);
     },
-    removeChoice: (state) => {
-      //   state.choices = false;
+    removeChoice: (state, index) => {
+      if (state.choices.length <= 2) return;
+      try {
+        state.choices.splice(index.payload, 1);
+      } catch (error) {
+        console.log(error);
+      }
       saveState(state);
     },
   },

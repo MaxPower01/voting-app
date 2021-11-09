@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { signOut } from "firebase/auth";
+import { auth } from "..";
 // import Box from "@mui/system/Box";
 
 export default function TopBar() {
@@ -20,7 +22,13 @@ export default function TopBar() {
     e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    dispatch(signout());
+    signOut(auth)
+      .then(() => {
+        dispatch(signout());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

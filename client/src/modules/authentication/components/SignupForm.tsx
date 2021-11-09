@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signin } from "../authenticationSlice";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import faker from "faker";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { auth } from "../../..";
 
 export default function SignupForm() {
   const dispatch = useDispatch();
@@ -25,6 +27,8 @@ export default function SignupForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // TODO : Validate form before submitting
+
     // const data = {
     //   username,
     //   email,
@@ -32,9 +36,13 @@ export default function SignupForm() {
     //   confirmPassword,
     // };
 
-    // TODO : On signing up success, redirect to polls page
-
-    dispatch(signin());
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        dispatch(signin());
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     console.log("%cSigning up...", "font-size: 1.25em;");
   };

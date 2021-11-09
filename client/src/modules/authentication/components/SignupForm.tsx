@@ -1,11 +1,10 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { signin } from "../authenticationSlice";
 import faker from "faker";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useDispatch } from "react-redux";
-import { signin } from "../authenticationSlice";
-import { Navigate } from "react-router-dom";
 
 export default function SignupForm() {
   const dispatch = useDispatch();
@@ -26,18 +25,18 @@ export default function SignupForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = {
-      username,
-      email,
-      password,
-      confirmPassword,
-    };
+    // const data = {
+    //   username,
+    //   email,
+    //   password,
+    //   confirmPassword,
+    // };
 
-    // TODO : On signing up success, redirect to surveys page
+    // TODO : On signing up success, redirect to polls page
 
     dispatch(signin());
 
-    console.log("%cSignin up...", "font-size: 1.25em;");
+    console.log("%cSigning up...", "font-size: 1.25em;");
   };
 
   const fillWithFaker = (

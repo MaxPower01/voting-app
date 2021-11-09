@@ -6,7 +6,7 @@ import TopBar from "./components/TopBar";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
-import Surveys from "./pages/Surveys";
+import Polls from "./pages/Polls";
 
 export default function App() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -19,7 +19,7 @@ export default function App() {
         <Route
           path="/home"
           element={
-            isAuthenticated ? <Navigate replace to="/surveys" /> : <Home />
+            isAuthenticated ? <Navigate replace to="/polls" /> : <Home />
           }
         />
         <Route path="" element={<Navigate replace to="/home" />} />
@@ -27,16 +27,16 @@ export default function App() {
         <Route
           path="/signup"
           element={
-            isAuthenticated ? <Navigate replace to="/surveys" /> : <Signup />
+            isAuthenticated ? <Navigate replace to="/polls" /> : <Signup />
           }
         />
 
         <Route path="/signin" element={<Signin />} />
 
         <Route
-          path="/surveys"
+          path="/polls"
           element={
-            isAuthenticated ? <Surveys /> : <Navigate replace to="/signup" />
+            isAuthenticated ? <Polls /> : <Navigate replace to="/signup" />
           }
         />
       </Routes>

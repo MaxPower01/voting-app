@@ -1,16 +1,16 @@
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import {
+  selectIsAuthenticated,
+  signout,
+} from "../modules/authentication/authenticationSlice";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 // import Box from "@mui/system/Box";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
-import {
-  selectIsAuthenticated,
-  signout,
-} from "../modules/authentication/authenticationSlice";
 
 export default function TopBar() {
   const dispatch = useDispatch();
@@ -34,9 +34,9 @@ export default function TopBar() {
 
         {isAuthenticated ? (
           <React.Fragment>
-            <Link to="surveys">
+            <Link to="polls">
               <Button variant="contained" color="primary">
-                Surveys
+                Polls
               </Button>
             </Link>
             <Button color="primary" onClick={onSignout}>

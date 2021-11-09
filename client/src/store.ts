@@ -1,11 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import authenticationReducer from "./modules/authentication/authenticationSlice";
-import surveyCreationReducer from "./modules/surveyCreation/surveyCreationSlice";
+import pollCreationReducer from "./modules/pollCreation/pollCreationSlice";
 
 const store = configureStore({
   reducer: {
     authentication: authenticationReducer,
-    surveyCreation: surveyCreationReducer,
+    pollCreation: pollCreationReducer,
   },
 });
 

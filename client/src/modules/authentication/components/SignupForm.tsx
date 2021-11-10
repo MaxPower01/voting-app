@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signin } from "../authenticationSlice";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 import faker from "faker";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { auth } from "../../..";
 
 export default function SignupForm() {
   const dispatch = useDispatch();
@@ -27,17 +27,10 @@ export default function SignupForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // TODO : Validate form before submitting
-
-    // const data = {
-    //   username,
-    //   email,
-    //   password,
-    //   confirmPassword,
-    // };
+    // TODO : Persist login state
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(() => {
         dispatch(signin());
       })
       .catch((error) => {

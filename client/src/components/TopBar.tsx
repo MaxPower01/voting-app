@@ -11,17 +11,18 @@ import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { signOut } from "firebase/auth";
-import { auth } from "..";
+import { auth } from "../modules/authentication/firebase";
 // import Box from "@mui/system/Box";
 
 export default function TopBar() {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  const onSignout = (
+  const onSignoutButtonClick = (
     e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
+
     signOut(auth)
       .then(() => {
         dispatch(signout());
@@ -47,7 +48,7 @@ export default function TopBar() {
                 Polls
               </Button>
             </Link>
-            <Button color="primary" onClick={onSignout}>
+            <Button color="primary" onClick={onSignoutButtonClick}>
               Sign out
             </Button>
           </React.Fragment>

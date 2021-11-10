@@ -22,6 +22,7 @@ export default function App() {
             isAuthenticated ? <Navigate replace to="/polls" /> : <Home />
           }
         />
+
         <Route path="" element={<Navigate replace to="/home" />} />
 
         <Route
@@ -31,7 +32,12 @@ export default function App() {
           }
         />
 
-        <Route path="/signin" element={<Signin />} />
+        <Route
+          path="/signin"
+          element={
+            isAuthenticated ? <Navigate replace to="/polls" /> : <Signin />
+          }
+        />
 
         <Route
           path="/polls"

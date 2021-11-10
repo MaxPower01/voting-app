@@ -1,21 +1,24 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import PollChoices from "./PollChoices";
-import Box from "@mui/material/Box";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
+import { useDispatch, useSelector } from "react-redux";
+import { doc, setDoc } from "firebase/firestore";
 import {
   selectDialogOpened,
   closeDialog,
   addChoice,
   selectChoices,
 } from "../pollCreationSlice";
-import { useDispatch, useSelector } from "react-redux";
+import PollChoices from "./PollChoices";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
+import { db } from "../../authentication/firebase";
+import { v4 as uuid } from "uuid";
 
 export default function PollCreationDialog() {
   const dispatch = useDispatch();
@@ -30,14 +33,14 @@ export default function PollCreationDialog() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = {
+    console.log("%cSubmitting poll...", "font-size: 1.25em;");
+    console.table([title, description, choices]);
+
+    await setDoc(doc(db, "polls", uuid()), {
       title,
       description,
       choices,
-    };
-
-    console.log("%cSubmitting survey...", "font-size: 1.25em;");
-    console.table(data);
+    });
   };
 
   return (

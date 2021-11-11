@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { removeChoice, updateChoice } from "../pollCreationSlice";
+import { removeChoice, updateChoice } from "../../pollSlice";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
@@ -11,14 +11,14 @@ type PollChoiceProps = {
   value: string;
 };
 
-export default function PollChoice(props: PollChoiceProps) {
+export default function CreatePollChoice(props: PollChoiceProps) {
   const dispatch = useDispatch();
 
   // Cannot use "useState" here because it will interfer with the re-rendering of the parent component "SurveyChoices",
   // causing the current component to be desynchronized with its state.
   let value = props.value;
 
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     value = e.target.value;
     dispatch(updateChoice({ index: props.index, value }));
@@ -37,7 +37,7 @@ export default function PollChoice(props: PollChoiceProps) {
           label={`Choice #${props.index + 1}`}
           type="text"
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           fullWidth
         />
       </Grid>

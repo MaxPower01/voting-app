@@ -16,7 +16,7 @@ export default function SignupForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name === "username") setUsername(value);
     else if (name === "email") setEmail(value);
@@ -24,7 +24,7 @@ export default function SignupForm() {
     else if (name === "confirmPassword") setConfirmPassword(value);
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // TODO : Persist login state
@@ -52,7 +52,7 @@ export default function SignupForm() {
   };
 
   return (
-    <form noValidate onSubmit={onSubmit}>
+    <form noValidate onSubmit={handleSubmit}>
       <Grid container justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <TextField
@@ -60,7 +60,7 @@ export default function SignupForm() {
             name="username"
             type="text"
             value={username}
-            onChange={onChange}
+            onChange={handleChange}
             fullWidth
           />
         </Grid>
@@ -70,7 +70,7 @@ export default function SignupForm() {
             name="email"
             type="email"
             value={email}
-            onChange={onChange}
+            onChange={handleChange}
             fullWidth
           />
         </Grid>
@@ -80,7 +80,7 @@ export default function SignupForm() {
             name="password"
             type="password"
             value={password}
-            onChange={onChange}
+            onChange={handleChange}
             fullWidth
           />
         </Grid>
@@ -90,11 +90,11 @@ export default function SignupForm() {
             name="confirmPassword"
             type="password"
             value={confirmPassword}
-            onChange={onChange}
+            onChange={handleChange}
             fullWidth
           />
         </Grid>
-        <Grid item xs={10}>
+        {/* <Grid item xs={10}>
           <Button
             onClick={fillWithFaker}
             variant="contained"
@@ -103,7 +103,7 @@ export default function SignupForm() {
           >
             Fill with faker
           </Button>
-        </Grid>
+        </Grid> */}
         <Grid item xs={10}>
           <Button type="submit" variant="contained" color="primary" fullWidth>
             Submit

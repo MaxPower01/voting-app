@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Polls from "./pages/Polls";
+import Box from "@mui/material/Box";
 
 export default function App() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -46,6 +47,8 @@ export default function App() {
           }
         />
       </Routes>
+
+      <Box sx={{ height: "5em" }} />
     </BrowserRouter>
   );
 }

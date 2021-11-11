@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import {
-  selectDialogOpened,
-  closeDialog,
+  selectCreatePollDialogOpened,
+  closeCreatePollDialog,
   addChoice,
-  selectChoices,
-} from "../pollCreationSlice";
-import PollChoices from "./PollChoices";
+  selectCreatePollChoices,
+  updateChoice,
+  resetChoices,
+} from "../../pollSlice";
+import CreatePollChoices from "./CreatePollChoices";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -17,42 +19,75 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
-import { db } from "../../authentication/firebase";
+import { auth, db } from "../../../authentication/firebase";
+import faker from "faker";
 import { v4 as uuid } from "uuid";
 
-export default function PollCreationDialog() {
+export default function CreatePollDialog() {
   const dispatch = useDispatch();
 
-  const dialogOpened = useSelector(selectDialogOpened);
+  const dialogOpened = useSelector(selectCreatePollDialogOpened);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const choices = useSelector(selectChoices);
+  const choices = useSelector(selectCreatePollChoices);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const fillWithFaker = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setTitle(faker.lorem.sentence().replace(/\./g, "?"));
+    setDescription(faker.lorem.paragraph());
+
+    choices.forEach((choice, index) => {
+      dispatch(
+        updateChoice({
+          index,
+          value: `#${index + 1} – ${faker.lorem.sentence().replace(/\./g, "")}`,
+        })
+      );
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     console.log("%cSubmitting poll...", "font-size: 1.25em;");
-    console.table([title, description, choices]);
+    console.table({ title, description, choices });
 
-    await setDoc(doc(db, "polls", uuid()), {
-      title,
-      description,
-      choices,
-    });
+    await setDoc(
+      doc(
+        db,
+        "polls",
+        `${auth.currentUser?.uid}-${Timestamp.now().nanoseconds}`
+      ),
+      {
+        id: uuid(),
+        userId: auth.currentUser?.uid,
+        timestamp: Timestamp.now(),
+        title,
+        description,
+        choices,
+      }
+    );
+
+    dispatch(closeCreatePollDialog());
+
+    setTitle("");
+    setDescription("");
+    dispatch(resetChoices());
   };
 
   return (
     <Dialog
       scroll="paper"
       open={dialogOpened}
-      onClose={() => dispatch(closeDialog())}
+      onClose={() => dispatch(closeCreatePollDialog())}
     >
       <DialogTitle>New poll</DialogTitle>
 
       <DialogContent>
-        <form id="new-survey" onSubmit={onSubmit}>
+        <form id="new-poll" onSubmit={handleSubmit}>
           <Box sx={{ paddingTop: 2 }}>
             <Grid container justifyContent="center" spacing={2}>
               <Grid item xs={12}>
@@ -88,7 +123,7 @@ export default function PollCreationDialog() {
               </Grid>
 
               <Grid item xs={12}>
-                <PollChoices />
+                <CreatePollChoices />
               </Grid>
             </Grid>
           </Box>
@@ -109,13 +144,24 @@ export default function PollCreationDialog() {
 
           <Grid item xs={12}>
             <Button
-              form="new-survey"
+              variant="contained"
+              color="secondary"
+              onClick={fillWithFaker}
+              fullWidth
+            >
+              Fill with faker
+            </Button>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              form="new-poll"
               type="submit"
               variant="contained"
               color="primary"
               fullWidth
             >
-              Publish survey
+              Publish poll
             </Button>
           </Grid>
         </Grid>

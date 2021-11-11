@@ -13,7 +13,7 @@ export default function SigninForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name === "email") {
       setEmail(value);
@@ -22,7 +22,7 @@ export default function SigninForm() {
     }
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // TODO : Persist login state
@@ -39,7 +39,7 @@ export default function SigninForm() {
   };
 
   return (
-    <form noValidate onSubmit={onSubmit}>
+    <form noValidate onSubmit={handleSubmit}>
       <Grid container justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <TextField
@@ -47,7 +47,7 @@ export default function SigninForm() {
             name="email"
             type="email"
             value={email}
-            onChange={onChange}
+            onChange={handleChange}
             fullWidth
           />
         </Grid>
@@ -57,7 +57,7 @@ export default function SigninForm() {
             name="password"
             type="password"
             value={password}
-            onChange={onChange}
+            onChange={handleChange}
             fullWidth
           />
         </Grid>

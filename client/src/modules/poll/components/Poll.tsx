@@ -87,7 +87,6 @@ export default function Poll(props: PollProps) {
                       variant="determinate"
                       value={normalize(choice.votes)}
                     />
-                    {choice.votes}
                   </Grid>
                 </Grid>
               ))

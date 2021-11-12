@@ -9,7 +9,7 @@ export default function Signin() {
     <Container>
       <Grid container direction="column" alignItems="center" spacing={2}>
         <Grid item>
-          <Typography variant="h1">Signup</Typography>
+          <Typography variant="h1">Signin</Typography>
         </Grid>
 
         <Grid item>

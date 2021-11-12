@@ -14,17 +14,34 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import FormHelperText from "@mui/material/FormHelperText";
+import {
+  doc,
+  Timestamp,
+  updateDoc,
+  increment,
+  writeBatch,
+  query,
+  collection,
+  where,
+  getDocs,
+  limit,
+} from "firebase/firestore";
+import { auth, db } from "../../../authentication/firebase";
+import { v4 as uuid } from "uuid";
+import TextField from "@mui/material/TextField";
 
 export default function VoteDialog(props: PollProps) {
   const dialogState = useSelector(selectVoteDialogState);
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState<number | null>(null);
+  const [value, setValue] = useState<string | null>(null);
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
 
+  const [name, setName] = useState("");
+
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value as unknown as number);
+    setValue((event.target as HTMLInputElement).value);
     setHelperText("");
     setError(false);
   };
@@ -37,8 +54,44 @@ export default function VoteDialog(props: PollProps) {
       setError(true);
     } else {
       console.log("%cSubmitting vote...", "font-size: 1.25em;");
+
+      const voteId = uuid();
+
+      const batch = writeBatch(db);
+
+      const q = query(
+        collection(db, "choices"),
+        where("pollId", "==", props.id),
+        where("id", "==", value),
+        limit(1)
+      );
+      const querySnapshot = await getDocs(q);
+
+      const voteRef = doc(db, "votes", voteId);
+
+      batch.set(voteRef, {
+        id: voteId,
+        pollId: props.id,
+        choiceId: value,
+        userId: auth.currentUser?.uid,
+        timestamp: Timestamp.now(),
+        username: name,
+      });
+
+      querySnapshot.forEach((docSnapshot) => {
+        batch.update(docSnapshot.ref, { votes: increment(1) });
+      });
+
+      // Must close dialog before committing batch to avoid doing an update on an unmounted component.
+      handleDialogClose();
+      await batch.commit();
     }
   };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
   const handleDialogClose = () => {
     dispatch(closeVoteDialog(props.id));
     setValue(null);
@@ -69,17 +122,28 @@ export default function VoteDialog(props: PollProps) {
               value={value}
               onChange={handleRadioChange}
             >
-              {props.choices.map((choice, index) => (
-                <FormControlLabel
-                  key={index}
-                  value={index}
-                  control={<Radio />}
-                  label={choice}
-                />
-              ))}
+              {props.choices
+                .sort((a, b) => a.index - b.index)
+                .map((choice, index) => (
+                  <FormControlLabel
+                    key={index}
+                    value={choice.id}
+                    control={<Radio />}
+                    label={choice.value}
+                  />
+                ))}
             </RadioGroup>
             <FormHelperText>{helperText}</FormHelperText>
           </FormControl>
+
+          <TextField
+            label="Name"
+            name="name"
+            type="text"
+            value={name}
+            onChange={handleNameChange}
+            fullWidth
+          />
         </form>
       </DialogContent>
 

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signin } from "../authenticationSlice";
 import { auth } from "../firebase";
-import faker from "faker";
+// import faker from "faker";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -40,16 +40,16 @@ export default function SignupForm() {
     console.log("%cSigning up...", "font-size: 1.25em;");
   };
 
-  const fillWithFaker = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const password = faker.internet.password();
+  // const fillWithFaker = (
+  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  // ) => {
+  //   const password = faker.internet.password();
 
-    setUsername(faker.internet.userName());
-    setEmail(faker.internet.email());
-    setPassword(password);
-    setConfirmPassword(password);
-  };
+  //   setUsername(faker.internet.userName());
+  //   setEmail(faker.internet.email());
+  //   setPassword(password);
+  //   setConfirmPassword(password);
+  // };
 
   return (
     <form noValidate onSubmit={handleSubmit}>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, Timestamp, writeBatch } from "firebase/firestore";
 import {
   selectCreatePollDialogOpened,
   closeCreatePollDialog,
@@ -20,7 +20,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
 import { auth, db } from "../../../authentication/firebase";
-import faker from "faker";
+// import faker from "faker";
 import { v4 as uuid } from "uuid";
 
 export default function CreatePollDialog() {
@@ -33,21 +33,21 @@ export default function CreatePollDialog() {
 
   const choices = useSelector(selectCreatePollChoices);
 
-  const fillWithFaker = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setTitle(faker.lorem.sentence().replace(/\./g, "?"));
-    setDescription(faker.lorem.paragraph());
+  // const fillWithFaker = (
+  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  // ) => {
+  //   setTitle(faker.lorem.sentence().replace(/\./g, "?"));
+  //   setDescription(faker.lorem.paragraph());
 
-    choices.forEach((choice, index) => {
-      dispatch(
-        updateChoice({
-          index,
-          value: `#${index + 1} – ${faker.lorem.sentence().replace(/\./g, "")}`,
-        })
-      );
-    });
-  };
+  //   choices.forEach((choice, index) => {
+  //     dispatch(
+  //       updateChoice({
+  //         index,
+  //         value: `#${index + 1} – ${faker.lorem.sentence().replace(/\./g, "")}`,
+  //       })
+  //     );
+  //   });
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,21 +55,35 @@ export default function CreatePollDialog() {
     console.log("%cSubmitting poll...", "font-size: 1.25em;");
     console.table({ title, description, choices });
 
-    await setDoc(
-      doc(
-        db,
-        "polls",
-        `${auth.currentUser?.uid}-${Timestamp.now().nanoseconds}`
-      ),
-      {
-        id: uuid(),
-        userId: auth.currentUser?.uid,
-        timestamp: Timestamp.now(),
-        title,
-        description,
-        choices,
-      }
-    );
+    const batch = writeBatch(db);
+
+    const pollId = uuid();
+
+    const pollRef = doc(db, "polls", pollId);
+
+    batch.set(pollRef, {
+      id: pollId,
+      userId: auth.currentUser?.uid,
+      timestamp: Timestamp.now(),
+      title,
+      description,
+      choices,
+    });
+
+    for (let i = 0; i < choices.length; i++) {
+      const choice = choices[i];
+      const choiceId = uuid();
+      const choiceRef = doc(db, "choices", choiceId);
+      batch.set(choiceRef, {
+        id: choiceId,
+        index: i,
+        pollId: pollId,
+        value: choice,
+        votes: 0,
+      });
+    }
+
+    await batch.commit();
 
     dispatch(closeCreatePollDialog());
 
@@ -142,7 +156,7 @@ export default function CreatePollDialog() {
             </Button>
           </Grid>
 
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Button
               variant="contained"
               color="secondary"
@@ -151,7 +165,7 @@ export default function CreatePollDialog() {
             >
               Fill with faker
             </Button>
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <Button
